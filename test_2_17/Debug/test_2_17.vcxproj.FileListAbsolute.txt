@@ -1,0 +1,2 @@
+D:\vs2019存放\test_2_17\Debug\test_2_17.exe
+D:\vs2019存放\test_2_17\Debug\test_2_17.pdb

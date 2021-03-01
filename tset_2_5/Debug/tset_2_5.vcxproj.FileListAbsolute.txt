@@ -1,0 +1,2 @@
+D:\vs2019存放\tset_2_5\Debug\tset_2_5.exe
+D:\vs2019存放\tset_2_5\Debug\tset_2_5.pdb
