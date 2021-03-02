@@ -1,0 +1,2 @@
+D:\vs2019存放\三子棋\Debug\三子棋.exe
+D:\vs2019存放\三子棋\Debug\三子棋.pdb
