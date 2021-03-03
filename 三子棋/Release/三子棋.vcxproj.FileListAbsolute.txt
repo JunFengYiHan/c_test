@@ -1,1 +1,2 @@
 D:\vs2019存放\三子棋\Release\三子棋.exe
+D:\vs2019存放\test\三子棋\Release\三子棋.exe
