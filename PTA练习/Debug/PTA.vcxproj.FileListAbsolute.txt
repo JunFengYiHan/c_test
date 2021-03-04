@@ -1,0 +1,2 @@
+D:\vs2019存放\PTA\Debug\PTA.exe
+D:\vs2019存放\PTA\Debug\PTA.pdb
