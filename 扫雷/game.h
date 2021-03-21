@@ -4,7 +4,7 @@
 #define COL 9
 #define ROWS ROW+2
 #define COLS COL+2
-#define MINE_NUM 20
+#define MINE_NUM 10
 
 #include<stdio.h>
 #include<windows.h>

@@ -12,7 +12,7 @@ void game()
 	initboard(showboard, ROWS, COLS, '*');
 	printboard(showboard, ROW, COL);
 	setmine(mineboard, MINE_NUM, ROW, COL);
-	printboard(mineboard, ROW, COL);
+	//printboard(mineboard, ROW, COL);
 	play(mineboard, showboard, ROW, COL);
 
 }
@@ -20,9 +20,9 @@ void game()
 int main()
 {
 	int Input = 0;
-	srand((unsigned int)time(NULL));
 	do 
 	{
+		srand((unsigned int)time(NULL));//随机数的种子
 		menu();
 		printf("请选择>:");
 		scanf("%d", &Input);

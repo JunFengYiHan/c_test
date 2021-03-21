@@ -59,8 +59,8 @@ void setmine(char board[ROWS][COLS], int mine_num, int row, int col)
 {
 	while (mine_num)
 	{
-		int x = rand() % row + 1;
-		int y = rand() % col + 1;
+		int x = rand() % row + 1;//生成随机数
+		int y = rand() % col + 1;//生成随机数
 		if (board[x][y] == '0')
 		{
 			board[x][y] = '1';
@@ -88,41 +88,68 @@ int find(char board[ROWS][COLS], int x, int y)
 	return count;
 }
 
-void spread(char showboard[ROWS][COLS], char mineboard[ROWS][COLS], int x, int y, int* pn)
+void spread(char showboard[ROWS][COLS], char mineboard[ROWS][COLS], int x, int y)
 {
-	showboard[x][y] = ' ';
-	*pn += 1;
+	//if (x > 0 && x <= ROW && y > 0 && y <= COL)
+	//{
+		showboard[x][y] = ' ';
+		//*pn += 1;
+		int i = 0;
+		int j = 0;
+		int ret = 0;
+
+		for (i = x - 1; i <= x + 1; i++)
+		{
+			for (j = y - 1; j <= y + 1; j++)
+			{
+				if (i > 0 && i <= ROW && j > 0 && j <= COL && mineboard[i][j] != '1' && showboard[i][j] == '*')
+				{
+					ret = find(mineboard, i, j);
+					if (!ret)
+					{
+						spread(showboard, mineboard, i, j);
+					}
+					if (ret)
+					{
+						showboard[i][j] = ret + '0';
+						//*pn += 1;
+					}
+					else if (showboard[i][j] == '*')
+					{
+						showboard[i][j] = ' ';
+						//*pn += 1;
+					}
+				}
+				
+			}
+		}
+	//}
+}
+int Isblank(char board[ROWS][COLS], int row, int col)
+{
 	int i = 0;
 	int j = 0;
-	int ret = 0;
-	for (i = x - 1; i <= x + 1; i++)
+	int n = 0;
+	for (i = 1; i <= row; i++)
 	{
-		for (j = y - 1; j <= y + 1; j++)
+		for (j = 1; j <= col; j++)
 		{
-			ret = find(mineboard, i, j);
-			if (!ret && x > 0 && x <= ROW && y > 0 && y <= COL && showboard[i][j] == '*')
+			if (board[i][j] != '*')
 			{
-				spread(showboard, mineboard, i, j, pn);
-			}
-			else if(ret)
-			{
-				showboard[i][j] = ret + '0';
-			}
-			else
-			{
-				showboard[i][j] = ' ';
+				n++;
 			}
 		}
 	}
+	return n;
 }
 
 void play(char mineboard[ROWS][COLS], char showboard[ROWS][COLS], int row, int col)
 {
 	int x = 0;
 	int y = 0;
-	int n = 0;
+	int n = 0;//记录已排除的格子
 	
-	while (row*col-MINE_NUM-n)
+	while (row * col - MINE_NUM - n)
 	{
 		printf("请输入坐标，以空格隔开输入>:");
 		scanf("%d %d", &x, &y);
@@ -137,13 +164,15 @@ void play(char mineboard[ROWS][COLS], char showboard[ROWS][COLS], int row, int c
 			if (ret != 0)
 			{
 				showboard[x][y] = ret + '0';
-				n++;
+				//n++;
 			}
 			else
 			{
 				//showboard[x][y] = ' ';
-				spread(showboard, mineboard, x, y, &n);
+				spread(showboard, mineboard, x, y);
+				
 			}
+			n = Isblank(showboard, row, col);//检查已经有多少格子已经排除
 			system("cls");
 			printboard(showboard, row, col);
 		}
