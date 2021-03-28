@@ -30,18 +30,101 @@
 //	return 0;
 //}
 //
+//#include<stdio.h>
+//#include<string.h>
+//
+//void left_move(char* str, int n)
+//{
+//	int len = strlen(str);
+//	int i = 0;
+//	while (n--)
+//	{
+//		char tmp = *str;
+//		for (i = 0; i < len - 1; i++)
+//		{
+//			*(str + i) = *(str + i + 1);
+//		}
+//		*(str + len - 1) = tmp;
+//	}
+//
+//}
+//
+//int main()
+//{
+//	char arr[] = "abcdef";
+//	left_move(arr, 2);
+//	printf("%s\n", arr);
+//	return 0;
+//}
+
+//#include<stdio.h>
+//#include<string.h>
+//
+//void reverse(char* str1, char* str2)
+//{
+//	while (str1 < str2)
+//	{
+//		char tmp = *str1;
+//		*str1 = *str2;
+//		*str2 = tmp;
+//		str1++;
+//		str2--;
+//	}
+//}
+//
+//void left_move(char* str, int n)
+//{
+//	int len = strlen(str);
+//	reverse(str, str + n - 1);
+//	reverse(str + n, str + len - 1);
+//	reverse(str, str + len - 1);
+//}
+//
+//int main()
+//{
+//	char arr[] = "abcdef";
+//	left_move(arr, 2);
+//	printf("%s\n", arr);
+//	return 0;
+//}
+
+
 #include<stdio.h>
+#include<string.h>
 
-void resever(char* arr, int n)
+void reverse(char* str, int n)
 {
-	char* str = arr;
-
+	int len = strlen(str);
+	int i = 0;
+	while (n--)
+	{
+		char tmp = *str;
+		for (i = 0; i < len - 1; i++)
+		{
+			*(str + i) = *(str + i + 1);
+		}
+		*(str + len - 1) = tmp;
+	}
+}
+int is_move(char* str1, char* str2)
+{
+	int len = strlen(str2);
+	while (len--)
+	{
+		reverse(str1, 1);
+		if (!strcmp(str1, str2))
+			return 1;
+	}
+	return 0;
 }
 
 int main()
 {
-	char arr[] = "abcdef";
-	resever(arr, 2);
+	char arr1[] = "abcdef";
+	char arr2[] = "cdefab";
+	if (is_move(arr1, arr2))
+		printf("Yes\n");
+	else
+		printf("NO\n");
 	return 0;
 }
-
