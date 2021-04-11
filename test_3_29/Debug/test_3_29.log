@@ -1,2 +1,2 @@
 ﻿  test.c
-  test_3_29.vcxproj -> D:\vs2019存放\test\test_3_29\Debug\test_3_29.exe
+D:\vs2019存放\test\test_3_29\test.c(209,1): error C2124: 被零除或对零求模

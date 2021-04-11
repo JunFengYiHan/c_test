@@ -68,9 +68,6 @@ int main()//L1-002 打印沙漏 --- 留有一个点过不去
 		}
 		printf("\n");
 	}
-	if (count)
-	{
 		printf("%d", count);
-	}
 	return 0;
 }
