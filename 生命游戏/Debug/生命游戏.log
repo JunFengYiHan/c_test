@@ -1,0 +1,4 @@
+﻿  test.c
+D:\vs2019存放\test\生命游戏\test.c(17,17): warning C4048: “char (*)[40]”和“char [22][42]”数组的下标不同
+D:\vs2019存放\test\生命游戏\test.c(18,15): warning C4048: “char (*)[40]”和“char [22][42]”数组的下标不同
+  生命游戏.vcxproj -> D:\vs2019存放\test\生命游戏\Debug\生命游戏.exe
