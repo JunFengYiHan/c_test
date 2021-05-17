@@ -69,31 +69,32 @@
 //	return 0;
 //}
 
-//#include<stdio.h>
-//
-//typedef struct Student {
-//	char name[21];
-//	char phone[12];
-//}Student;
-//
-//int main()
-//{
-//	Student arr[100] = { 0 };
-//	int n = 0;
-//	scanf("%d", &n);
-//	int  i = 0;
-//	for (i = 0; i < n; i++) {
-//		scanf("%s %s", &arr[i].name, &arr[i].phone);
-//	}
-//	printf("+---------------------------------------------+|");
-//	printf("| name                 | phone                |");
-//	printf("+---------------------- + ---------------------- + ");
-//	for (i = 0; i < n; i++) {
-//		printf("| %21s                 | %21s                |", arr[i].name, arr[i].phone);
-//		printf("+---------------------- + ---------------------- +");
-//	}
-//	return 0;
-//}
+#include<stdio.h>
+
+typedef struct Student {
+	char name[21];
+	char phone[12];
+}Student;
+
+int main()
+{
+	Student arr[100] = { 0 };
+	int n = 0;
+	scanf("%d", &n);
+	int  i = 0;
+	for (i = 0; i < n; i++) {
+		scanf("%s %s", &arr[i].name, &arr[i].phone);
+	}
+	printf("+---------------------------------------------+|");
+	printf("| name                 | phone                |");
+	printf("+---------------------- + ---------------------- + ");
+	for (i = 0; i < n; i++) {
+		printf("| %21s                 | %21s                |", arr[i].name, arr[i].phone);
+		printf("+---------------------- + ---------------------- +");
+	}
+	return 0;
+}
+
 //struct student
 //{
 //    int no;
@@ -150,13 +151,13 @@
 //    printf("%d %d %d\n", cnt_a, cnt_p, cnt_f);
 //}
 
-#include <stdio.h>
-struct ps {
-	double i;
-	char arr[24];
-};
-int main() {
-	struct ps bt;
-	printf("bt size:%u\n",sizeof(bt));
-	return 0;
-}
+//#include <stdio.h>
+//struct ps {
+//	double i;
+//	char arr[24];
+//};
+//int main() {
+//	struct ps bt;
+//	printf("bt size:%u\n",sizeof(bt));
+//	return 0;
+//}
