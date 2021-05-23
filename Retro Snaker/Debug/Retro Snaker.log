@@ -1,2 +1,3 @@
 ﻿  RetroSnaker.cpp
+D:\vs2019存放\test\Retro Snaker\RetroSnaker.cpp(141,46): warning C4390: “;”: 找到空的受控语句；这是否是有意的?
   Retro Snaker.vcxproj -> D:\vs2019存放\test\Retro Snaker\Debug\Retro Snaker.exe

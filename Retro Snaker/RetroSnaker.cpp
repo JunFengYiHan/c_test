@@ -2,29 +2,48 @@
 
 #include"RetroSnaker.h"
 
-void GameInit(Snaker* snaker)
+void Init(Snaker* snaker , Food* food)
 {
-	initgraph(640, 480/*,SHOWCONSOLE*/);//图像大小
-	snaker->size = 3;
+	
+	initgraph(LENGTH, WIDTH/*,SHOWCONSOLE*/);//图像大小
+	snaker->size = 10;
 	snaker->dir = RIGHT;
-	snaker->speed = 10;
+	snaker->speed = 5;
+	//snaker->speed = 10;
+	snaker->r = 5;
+	snaker->s = 100;
 	for (int i = 0; i < snaker->size; i++) {
-		snaker->coor[i].x = 320 - i*10;
-		snaker->coor[i].y = 240 ;
+		snaker->coor[i].x = LENGTH / 2 - i * 5;
+		//snaker->coor[i].x = LENGTH / 2 - i * 10;
+		snaker->coor[i].y = WIDTH / 2;
 	}
+	food->coor.x = rand() % LENGTH;
+	food->coor.y = rand() % WIDTH;
+	food->color = RGB(rand() % 256, rand() % 256, rand() % 256);
+	//food->flag = 1;
+	food->r = 5;
+	mciSendString(TEXT("open ./bgm.mp3 alias BGM"), 0, 0, 0);
+	mciSendString(TEXT("play BGM repeat"), 0, 0, 0);
 }
 
-void GameDraw(Snaker* snaker) 
+void GameDraw(Snaker* snaker,Food* food) 
 {
 	//双缓冲绘图防屏闪
 	BeginBatchDraw();//双缓冲开始
 	setbkcolor(RGB(91, 97, 105));//设置背景颜色
 	cleardevice();//清屏
-	//setfillcolor(RGB(rand()%256, rand() % 256, rand() % 256));//设置蛇的颜色GREEN
+	//etfillcolor(RGB(rand()%256, rand() % 256, rand() % 256));//设置蛇的颜色GREEN
 	setfillcolor(GREEN);//设置蛇的颜色
+	//绘制蛇
+	//solidcircle(snaker->coor[0].x, snaker->coor[0].y, snaker->r *2);
+	/*for (int i = 1; i < snaker->size; i++) {
+		solidcircle(snaker->coor[i].x, snaker->coor[i].y, snaker->r);
+	}*/
 	for (int i = 0; i < snaker->size; i++) {
-		solidcircle(snaker->coor[i].x, snaker->coor[i].y, 5);
+		solidcircle(snaker->coor[i].x, snaker->coor[i].y, snaker->r);
 	}
+	//绘制食物
+	solidcircle(food->coor.x, food->coor.y, food->r);
 	EndBatchDraw();//双缓冲结束
 }
 
@@ -39,24 +58,24 @@ void SnakerMove(Snaker* snaker)
 			case UP:
 				snaker->coor[0].y-=snaker->speed;
 				if (snaker->coor[0].y  <= 0) {
-					snaker->coor[0].y = 480;
+					snaker->coor[0].y = WIDTH;
 				}
 				break;
 			case DOWN:
 				snaker->coor[0].y+= snaker->speed;
-				if (snaker->coor[0].y  >= 480) {
+				if (snaker->coor[0].y  >= WIDTH) {
 					snaker->coor[0].y = 0;
 				}
 				break;
 			case LEFT:
 				snaker->coor[0].x-= snaker->speed;
 				if (snaker->coor[0].x <= 0) {
-					snaker->coor[0].x = 640;
+					snaker->coor[0].x = LENGTH;
 				}
 				break;
 			case RIGHT:
 				snaker->coor[0].x+= snaker->speed;
-				if (snaker->coor[0].x  >= 640) {
+				if (snaker->coor[0].x  >= LENGTH) {
 					snaker->coor[0].x = 0;
 				}
 				break;
@@ -65,7 +84,7 @@ void SnakerMove(Snaker* snaker)
 	}
 }
 
-void keyboard(Snaker* snaker)
+void Keyboard(Snaker* snaker)
 {
 	//检查键盘是否有输入
 	if (_kbhit()) {
@@ -99,8 +118,53 @@ void keyboard(Snaker* snaker)
 				snaker->dir = RIGHT;
 			}
 			break;
+		case ' ':
+			if (snaker->s) {
+				snaker->s -= 10;
+			}
+			break;
+		case 'l':
+		case 'L':
+			snaker->s += 10;
+			break;
+		case 27:Esc();
+			break;
 		default:
 			break;
 		}
+	}
+}
+
+void EatFood(Snaker* snaker, Food* food)
+{
+	if (snaker->coor[0].x >= food->coor.x - food->r 
+		&& snaker->coor[0].x <= food->coor.x + food->r
+		&& snaker->coor[0].y >= food->coor.y - food->r
+		&& snaker->coor[0].y <= food->coor.y + food->r) {
+		snaker->size++;
+		food->coor.x = rand() % (LENGTH / 10 - 4) * 10 + 20;
+		food->coor.y = rand() % (WIDTH /10 - 4)*10 + 20;
+		//food->flag = 0;
+	}
+	//if (snaker->coor[0].x + snaker->r >= food->coor.x - food->r
+	//	&& snaker->coor[0].x - snaker->r <= food->coor.x + food->r
+	//	&& snaker->coor[0].y + snaker->r >= food->coor.y - food->r
+	//	&& snaker->coor[0].y - snaker->r <= food->coor.y + food->r) {
+	//	snaker->size++;
+	//	//food->flag = 0;
+	//	food->coor.x = rand() % (LENGTH /10 - 4)*10+ 20;
+	//	food->coor.y = rand() % (WIDTH /10 - 4)*10 + 20;
+	//	
+	//}
+}
+void Esc()
+{
+	//Esc键值27
+	switch (_getch()) {
+	case 27:
+		exit(0);
+		break;
+	default:
+		break;
 	}
 }

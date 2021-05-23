@@ -2,23 +2,29 @@
 
 #include"RetroSnaker.h"
 
-void Game(Snaker* snaker)
+
+void Game(Snaker* snaker, Food* food)
 {
-	GameDraw(snaker);
+	
+	GameDraw(snaker,food);
 	SnakerMove(snaker);
-	keyboard(snaker);	
+	Keyboard(snaker);	
+	EatFood(snaker, food);
 }
 
 int main()
 {
+Flag:
+	srand((unsigned int) time(NULL));
 	Snaker snaker = { 0 };
-	GameInit(&snaker);
-	int n = 1;
+	Food food = { 0 };
+	Init(&snaker, &food);
+	int Input;
 	do
 	{
-		//n = _getch();
-		Game(&snaker);
-		Sleep(50);
-	}while (n);
+		//switch()
+		Game(&snaker, &food);
+		Sleep(snaker.s);
+	}while (1);
 	return 0;
 }
