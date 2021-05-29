@@ -5,26 +5,29 @@
 
 void Game(Snaker* snaker, Food* food)
 {
-	
 	GameDraw(snaker,food);
 	SnakerMove(snaker);
 	Keyboard(snaker);	
 	EatFood(snaker, food);
+	SnakerDie(snaker, food);
 }
 
 int main()
 {
-Flag:
 	srand((unsigned int) time(NULL));
 	Snaker snaker = { 0 };
 	Food food = { 0 };
+	initgraph(LENGTH+200, WIDTH/*,SHOWCONSOLE*/);//Í¼Ïñ´óÐ¡
+	//int Input;
+	while (menu()) {
 	Init(&snaker, &food);
-	int Input;
-	do
-	{
-		//switch()
-		Game(&snaker, &food);
-		Sleep(snaker.s);
-	}while (1);
+		do
+		{
+			Game(&snaker, &food);
+			Sleep(snaker.s);
+		}while (snaker.flag);
+		Sleep(1000);
+		cleardevice();
+	}
 	return 0;
 }
