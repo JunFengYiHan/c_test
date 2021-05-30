@@ -21,9 +21,9 @@ typedef struct Snaker {
 	int s;//多少毫秒刷新一次，形成可变速.
 //	int r;//蛇的半径圆形蛇
 //	int color;//蛇的颜色
-	int a;//蛇的边长
-	int flag;//标记蛇的生产状态
-	int grade;
+	int a;//蛇一节的边长
+	int flag;//标记蛇的生存状态
+	int grade;//得分
 	POINT coor[SNAKER];//蛇的坐标
 }Snaker;
 

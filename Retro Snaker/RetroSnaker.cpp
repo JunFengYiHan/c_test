@@ -2,25 +2,39 @@
 
 #include"RetroSnaker.h"
 int menu() {
+
 	settextcolor(LIGHTGREEN);
+	setbkmode(TRANSPARENT);//混合背景
 	settextstyle(25, 0, "宋体");
-flag:
-	outtextxy(LENGTH / 2-100, WIDTH / 2 - 100, "1.开始游戏");
-	outtextxy(LENGTH / 2-100, WIDTH / 2 -50, "2.退出游戏");
+//flag:
+	BeginBatchDraw();
+	IMAGE img;
+	loadimage(&img, "./背景.jpg", 0, 0);
+	putimage(0, 0, &img);
+	/*outtextxy(LENGTH / 2-70, WIDTH / 2 - 100, "1.开始游戏");
+	outtextxy(LENGTH / 2-70, WIDTH / 2 -50, "0.退出游戏");*/
+	outtextxy(LENGTH / 2 - 90, WIDTH / 2 - 100, "欢迎来到贪吃蛇小游戏");
+	outtextxy(LENGTH / 2 - 70, WIDTH / 2 - 50, "按任意键开始游戏");
+	EndBatchDraw();
 	/*outtextxy(LENGTH / 2-100, WIDTH / 2 -50, "3.游戏简介");*/
-	switch (_getch())
-	{
-	case '1':
-		return 1;
-	case '2':
-		return 0;
- 	default:
-		cleardevice();
-		outtextxy(LENGTH / 2 - 200, WIDTH / 2 - 100, "输入有误请重新输入！");
-		Sleep(1000);
-		cleardevice();
-		goto flag;
-	}
+	_getch();
+	return 1;
+	//switch (_getch())
+	//{
+	//case '1':
+	//	return 1;
+	//case '0':
+	//	return 0;
+ //	default:
+	//	//BeginBatchDraw();
+	//	cleardevice();
+	//	putimage(0, 0, &img);
+	//	outtextxy(LENGTH / 2 - 200, WIDTH / 2 - 100, "输入有误请重新输入！");
+	//	Sleep(1000);
+	//	cleardevice();
+	//	//EndBatchDraw();
+	//	goto flag;
+	//}
 }
 
 void Init(Snaker* snaker , Food* food)
@@ -28,60 +42,86 @@ void Init(Snaker* snaker , Food* food)
 	//播放音乐
 	mciSendString(TEXT("open ./bgm.mp3 alias BGM"), 0, 0, 0);
 	mciSendString(TEXT("play BGM repeat"), 0, 0, 0);
-	snaker->grade = 0;
-	snaker->size = 10;
-	snaker->dir = RIGHT;
-	snaker->speed = 10;
-	snaker->flag = 1;
+	snaker->grade = 0;//初始分数为0
+	snaker->size = 5;//初始长度为5
+	snaker->dir = RIGHT;//开始向右
+	snaker->speed = 10;//默认速度为10
+	snaker->flag = 1;//默认存活
 	//snaker->speed = 10;
 	//snaker->r = 5;圆形蛇半径
 	snaker->a = 10;//矩形蛇边长
-	snaker->s = 60;
+	snaker->s = 100;//刷新频率
 	for (int i = 0; i < snaker->size; i++) {
 		snaker->coor[i].x = LENGTH / 2 - i * 10;
 		//snaker->coor[i].x = LENGTH / 2 - i * 10;
 		snaker->coor[i].y = WIDTH / 2;
 	}
 	//矩形蛇
-	food->coor.x = rand() % (LENGTH / 10) * 10;
-	food->coor.y = rand() % (WIDTH / 10) * 10;
+	food->coor.x = rand() % (LENGTH / 10-4) * 10+20;//食物位置随机
+	food->coor.y = rand() % (WIDTH / 10-4) * 10+20;
 	/*food->coor.x = rand() % LENGTH;
 	food->coor.y = rand() % WIDTH;*///圆形蛇
 	food->color = RGB(rand() % 256, rand() % 256, rand() % 256);//食物颜色随机
 	//snaker->color = food->color;//初始化蛇的颜色
-	food->flag = 1;
+	food->flag = 1;//食物存在
 	//food->r = 5;//圆形食物
 	food->a = 10;//矩形食物
 }
-void ShowGrade(Snaker* snaker)
+void ShowSidebar(Snaker* snaker)//侧边栏
 {
+	setlinecolor(WHITE);
+	line(LENGTH,0 ,LENGTH,WIDTH);
 	char grade[20];
-	sprintf(grade, "分数：%d", snaker->grade);
+	char speed[20];
+	char score[20];
+	char length[20];
+	sprintf(length, "当前长度：%d", snaker->size);
+	sprintf(speed, "当前速度：%d",150 - snaker->s);
+	sprintf(grade, "当前得分：%d", snaker->grade);
+	sprintf(score, "食物分值：%d",15 - snaker->s/10);
 	settextcolor(LIGHTGREEN);
 	settextstyle(25, 0, "宋体");
-	outtextxy(LENGTH + 70, 100, grade);
+	outtextxy(LENGTH + 20, 10, length);
+	outtextxy(LENGTH + 20, 50, grade);
+	outtextxy(LENGTH + 20, 90, speed);
+	outtextxy(LENGTH + 20, 130, score);
+	outtextxy(LENGTH + 20, 170, "按Esc键暂停");
+	outtextxy(LENGTH + 20, 210, "W向上");
+	outtextxy(LENGTH + 20, 250, "S向下");
+	outtextxy(LENGTH + 20, 290, "A向左");
+	outtextxy(LENGTH + 20, 330, "D向右");
+	outtextxy(LENGTH + 20, 370, "空格加速");
+	outtextxy(LENGTH + 20, 410, "L键减速");
 }
-void GameDraw(Snaker* snaker, Food* food)
+void GameDraw(Snaker* snaker, Food* food)//方形蛇
 {
-	//双缓冲绘图防屏闪
+	
+	//批量绘制绘图防屏闪
 	BeginBatchDraw();//双缓冲开始
-	setbkcolor(RGB(91, 97, 105));//设置背景颜色
 	cleardevice();//清屏
+	/*IMAGE img;
+	loadimage(&img, "背景.jpg", 0, 0);
+	putimage(0, 0, &img);*/
+	setbkcolor(RGB(91, 97, 105));//设置背  ，景颜色
 	//etfillcolor(RGB(rand()%256, rand() % 256, rand() % 256));//设置蛇的颜色GREEN
 	for (int i = 0; i < snaker->size; i++) {
-		setfillcolor(RGB(rand()%256, rand() % 256, rand() % 256));//设置蛇的颜色
+		//setfillcolor(RGB(rand()%256, rand() % 256, rand() % 256));//设置蛇的颜色随机
+		setfillcolor(HSVtoRGB(7.0*i,0.9,1.0));//设置蛇的颜色渐变
 		//无边框蛇
 		/*solidrectangle(snaker->coor[i].x, snaker->coor[i].y,
 			snaker->coor[i].x + 10, snaker->coor[i].y + 10);*/
 		//有边框蛇
 		fillrectangle(snaker->coor[i].x, snaker->coor[i].y,
 			snaker->coor[i].x + snaker->a, snaker->coor[i].y + snaker->a);
-
+			/*FlushBatchDraw();*/
 	}
-	ShowGrade(snaker);
+	ShowSidebar(snaker);//打印侧边栏
+	
 	setfillcolor(food->color);//设置食物的颜色
 	fillrectangle(food->coor.x, food->coor.y, food->coor.x + food->a, food->coor.y + food->a);
-	EndBatchDraw();//双缓冲结束
+	EndBatchDraw();//双缓冲结束，输出图像
+	
+	
 }
 //void GameDraw(Snaker* snaker,Food* food) //圆形蛇
 //{
@@ -243,7 +283,9 @@ void Keyboard(Snaker* snaker)
 			break;
 		case 'l':
 		case 'L':
-			snaker->s += 10;
+			if (snaker->s < 140) {
+				snaker->s += 10;
+			}
 			break;
 		case 27:Esc();
 			break;
@@ -256,10 +298,15 @@ void Keyboard(Snaker* snaker)
 void EatFood(Snaker* snaker, Food* food)
 {
 	//矩形蛇
-	if (snaker->coor[0].x==food->coor.x&&snaker->coor[0].y==food->coor.y) {
+	if (snaker->coor[0].x == food->coor.x && snaker->coor[0].y == food->coor.y) {
 		snaker->size++;
 		food->flag = 0;
-		snaker->grade++;
+		/*if (snaker->s > 80) {
+			snaker->grade++;
+		}
+		else {*/
+			snaker->grade+=15-snaker->s/10;
+		/*}*/
 		while (!food->flag) {//食物不存在刷新食物
 			food->coor.x = rand() % (LENGTH / 10) * 10;
 			food->coor.y = rand() % (WIDTH /10 ) *10;
@@ -269,8 +316,10 @@ void EatFood(Snaker* snaker, Food* food)
 					food->flag = 0;//食物出现在蛇身上刷新食物
 				}
 			}
+
 		}
-		
+		food->color = RGB(rand() % 256, rand() % 256, rand() % 256);//食物颜色随机
+		//cleardevice();//清屏
 	}
 	//圆形蛇
 	//if (snaker->coor[0].x >= food->coor.x - food->r 
@@ -297,11 +346,14 @@ void EatFood(Snaker* snaker, Food* food)
 }
 void Esc()
 {
-	//Esc键值27
+	setbkmode(TRANSPARENT);//混合背景
+	IMAGE img;
+	loadimage(&img, "背景.jpg", 0, 0);
+	putimage(0, 0, &img);
 	outtextxy(LENGTH / 2 - 100, WIDTH / 2 - 100, "再次点击Esc退出游戏");
 	outtextxy(LENGTH / 2 - 100, WIDTH / 2 - 50, "按任意键继续");
 	switch (_getch()) {
-	case 27:
+	case 27://Esc键值27
 		exit(0);
 		break;
 	default:
@@ -314,7 +366,12 @@ void SnakerDie(Snaker* snaker, Food* food) {
 		settextcolor(LIGHTGREEN);
 		settextstyle(80, 0, _T("宋体"));
 		setbkmode(TRANSPARENT);
-		outtextxy(240, 220, _T("游戏失败"));
+		outtextxy(240, 220, _T("游戏结束"));
+		//char grade[20];
+		/*sprintf(grade, "总得分：%d", snaker->grade);
+		settextcolor(LIGHTGREEN);
+		settextstyle(25, 0, "宋体");
+		outtextxy(240, 240, grade)*/;
 		snaker->flag = 0;
 		mciSendString(TEXT("close BGM"), 0, 0, 0);
 		return;
@@ -324,7 +381,12 @@ void SnakerDie(Snaker* snaker, Food* food) {
 			settextcolor(LIGHTGREEN);
 			settextstyle(60, 0, _T("宋体"));
 			setbkmode(TRANSPARENT);
-			outtextxy(100, 100, _T("游戏失败"));
+			outtextxy(100, 100, _T("游戏结束"));
+			//char grade[20];
+			/*sprintf(grade, "总得分：%d", snaker->grade);
+			settextcolor(LIGHTGREEN);
+			settextstyle(25, 0, "宋体");
+			outtextxy(240, 240, grade)*/;
 			snaker->flag = 0;
 			mciSendString(TEXT("close BGM"), 0, 0, 0);
 			return;
