@@ -43,6 +43,7 @@ enum Direction {
 	RIGHT,
 	LEFT,
 };
+
 int menu();
 //初始化蛇和食物
 void Init(Snaker* snaker, Food* food);

@@ -206,7 +206,8 @@ void SaveContact(struct Con* ps)
 void ReadinContact(struct Con* ps)
 {
 	Stu tmp = { 0 };
-	FILE* pf = fopen("address book file.txt", "rb");
+	FILE* pf = fopen("address book file.dat", "rb");
+	//FILE* pf = fopen("address book file.txt", "r");
 	if (pf != NULL)
 	{
 		while (fread(&tmp, sizeof(Stu), 1, pf))
@@ -218,9 +219,9 @@ void ReadinContact(struct Con* ps)
 		fclose(pf);
 		pf = NULL;
 	}
-	/*else
+	else
 	{
 		printf("ReadinContact::%s\n", strerror(errno));
 		return;
-	}*/
+	}
 }

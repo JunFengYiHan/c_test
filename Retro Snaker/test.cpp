@@ -12,6 +12,7 @@ void Game(Snaker* snaker, Food* food)
 	SnakerDie(snaker, food);
 }
 
+
 int main()
 {
 	srand((unsigned int) time(NULL));
@@ -26,6 +27,7 @@ int main()
 	//int Input;
 	while (menu()) {
 	Init(&snaker, &food);
+
 		do
 		{
 			//cleardevice();
@@ -33,6 +35,7 @@ int main()
 			Sleep(snaker.s);
 			
 		}while (snaker.flag);
+
 		Sleep(1000);
 		cleardevice();
 	}
